@@ -8,41 +8,65 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 
 @SpringBootApplication
 public class ConsumingrestApplication {
 
-	/**
-	 * @Logger Used to send output to the console.
-	 */
-	private static final Logger log = LoggerFactory.getLogger(ConsumingrestApplication.class);
 
-	public static void main(String[] args) {
-		SpringApplication.run(ConsumingrestApplication.class, args);
-	}
+    private static final Logger log = LoggerFactory.getLogger(ConsumingrestApplication.class);
 
-	/**
-	 * @Bean specifies that the method returns a bean to be managed by Spring context.
-	 * @param builder
-	 * @return builder.build()
-	 */
-	@Bean
-	public RestTemplate restTemplate(RestTemplateBuilder builder) {
-		return builder.build();
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ConsumingrestApplication.class, args);
+    }
 
-	/**
-	 * Utilizes a REST template based on the Quote class.
-	 * @param restTemplate
-	 * @return Maps the API payload to our Quote class and uses the logger to display.
-	 * @throws Exception
-	 */
-	@Bean
-	public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
-		return args -> {
-			Quote quote = restTemplate.getForObject("http://localhost:8080/api/random", Quote.class);
-			log.info(quote.toString());
-		};
-	}
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
+    }
+
+    String url = "https://jsonplaceholder.typicode.com/posts/9";
+
+    @Bean
+    public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
+        return args -> {
+            Typicode typicode = restTemplate.getForObject(url, Typicode.class);
+            log.info(typicode.toString());
+        };
+    }
+
+//	/**
+//	 * @Logger Used to send output to the console.
+//	 */
+//	private static final Logger log = LoggerFactory.getLogger(ConsumingrestApplication.class);
+//
+//	public static void main(String[] args) {
+//		SpringApplication.run(ConsumingrestApplication.class, args);
+//	}
+//
+//	/**
+//	 * @Bean specifies that the method returns a bean to be managed by Spring context.
+//	 * @param builder
+//	 * @return builder.build()
+//	 */
+//	@Bean
+//	public RestTemplate restTemplate(RestTemplateBuilder builder) {
+//		return builder.build();
+//	}
+//
+//	/**
+//	 * Utilizes a REST template based on the Quote class.
+//	 * @param restTemplate
+//	 * @return Maps the API payload to our Quote class and uses the logger to display.
+//	 * @throws Exception
+//	 */
+//	@Bean
+//	public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
+//		return args -> {
+//			Quote quote = restTemplate.getForObject("http://localhost:8080/api/random", Quote.class);
+//			log.info(quote.toString());
+//		};
+//	}
 }
